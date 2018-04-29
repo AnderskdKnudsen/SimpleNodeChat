@@ -27,6 +27,18 @@ const knex = Knex(knexConfig.development);
 
 Model.knex(knex);
 
+//Nodemailer
+const nodemailer = require("nodemailer");   
+const mailCredentials = require("./config/mail_credentials.js");
+
+var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: mailCredentials.mail,
+        pass: mailCredentials.password
+    }
+});
+
 const db = {
     "Knex": knex,
     "User": require("./models/User.js")
@@ -91,6 +103,23 @@ app.post("/submit-user", (req, res) => {
                             response.status = 200;
                             response.message = "User successfully created!";
 
+                            var mailOptions = {
+                                from: mailCredentials.mail,
+                                to: req.body.email,
+                                subject: "Welcome, welcome.",
+                                text: "Welcome " + req.body.username + " to simplenodechat.awersome!"
+                            };
+
+                            transporter.sendMail(mailOptions, (err, info) => {
+                                if(err) {
+                                    response.mailstatus = 403;
+                                    response.mailinfo = "Error sending confirmation mail!";
+                                }
+                                else {
+                                    response.mailstatus = 200;
+                                    response.mailinfo = "Mail sent!";
+                                }
+                            });
                             res.send(response);
                         }).catch(err => {
                             response.status = 500;

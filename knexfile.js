@@ -1,4 +1,4 @@
-const credentials = require("./mysql_config/mysql_credentials.js");
+const credentials = require("./config/mysql_credentials.js");
 
 module.exports = {
 
