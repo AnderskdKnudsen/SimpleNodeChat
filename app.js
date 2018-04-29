@@ -6,8 +6,6 @@ var startPage = {
     index: "login.html"
 };
 
-//Handle login
-
 //Body-parser and static(with selected startpage)
 app.use("/", express.static("public", startPage));
 app.use(bodyParser.urlencoded({ extended: false }));
