@@ -6,12 +6,7 @@ var startPage = {
     index: "login.html"
 };
 
-
-
-//TODO
-//Send email upon successful submit
 //Handle login
-
 
 //Body-parser and static(with selected startpage)
 app.use("/", express.static("public", startPage));
@@ -58,18 +53,34 @@ const server = app.listen(3000, err => {
 app.post("/login-user", (req, res) => {
     let response = {};
 
-    db.User.query().select("username", req.body.username)
+    db.User.query().select().where("username", req.body.username)
         .then(foundUsers => {
             if(foundUsers.length === 0){
                 response.status = 404,
                 response.message = "Error! User not found!"
+
+                res.send(response);
             } else if(foundUsers.length >= 1){
-                response.status = 200,
-                response.message = "Successfully logged in."
+                bcrypt.compare(req.body.password, foundUsers[0].password)
+                    .then(found => {
+                        if(found) {
+                            response.status = 200;
+                            response.message = "Successfully logged in!";
+
+                            res.send(response);
+                        } else {
+                            response.status = 403;
+                            response.status = "Incorrect login! Try Again.";
+
+                            res.send(response);
+                        }
+                    });
             }
         }).catch(err => {
             response.status = 500,
             response.message = "Error querying database! Try again later";
+
+            res.send(message);
         });
 
 });

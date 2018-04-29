@@ -1,4 +1,6 @@
 $(document).ready(() => {
+    $(".loader").hide();
+
     var usernameParam = getParameterByName("username");
     $(".login-username").val(usernameParam);
 
@@ -17,7 +19,24 @@ $(document).ready(() => {
             url: "login-user",
             data: loginData
         }).done(response => {
-            
+            if (response.status === 200) {
+                $(".loader").show();
+                $(".login-info").empty();
+                $(".login-info").append("<p class='text-success'>" + response.message + "</p>");
+                setInterval(() => {
+                    $(".loader").hide();
+                    window.location = "/index.html";
+                }, 3000);
+            } else if (response.status === 404){
+                $(".login-info").empty();
+                $(".login-info").append("<p class='text-danger'>" + response.message + "</p>");
+            } else if (response.status === 403) {
+                $(".login-info").empty();
+                $(".login-info").append("<p class='text-danger'>" + response.message + "</p>");
+            } else if (response.status === 500) {
+                $(".login-info").empty();
+                $(".login-info").append("<p class='text-danger'>" + response.message + "</p>");
+            }
         });
     });
 
