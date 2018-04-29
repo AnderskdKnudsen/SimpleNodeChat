@@ -55,7 +55,7 @@ app.post("/login-user", (req, res) => {
         .then(foundUsers => {
             if(foundUsers.length === 0){
                 response.status = 404,
-                response.message = "Error! User not found!"
+                response.message = "Incorrect login! Try again or make a new user!";
 
                 res.send(response);
             } else if(foundUsers.length >= 1){
@@ -68,7 +68,7 @@ app.post("/login-user", (req, res) => {
                             res.send(response);
                         } else {
                             response.status = 403;
-                            response.status = "Incorrect login! Try Again.";
+                            response.message = "Incorrect login! Try again or make a new user!";
 
                             res.send(response);
                         }
