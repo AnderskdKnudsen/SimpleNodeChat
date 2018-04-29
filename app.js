@@ -67,7 +67,7 @@ app.post("/login-user", (req, res) => {
 
                             res.send(response);
                         } else {
-                            response.status = 403;
+                            response.status = 404;
                             response.message = "Incorrect login! Try again or make a new user!";
 
                             res.send(response);

@@ -30,9 +30,6 @@ $(document).ready(() => {
             } else if (response.status === 404){
                 $(".login-info").empty();
                 $(".login-info").append("<p class='text-danger'>" + response.message + "</p>");
-            } else if (response.status === 403) {
-                $(".login-info").empty();
-                $(".login-info").append("<p class='text-danger'>" + response.message + "</p>");
             } else if (response.status === 500) {
                 $(".login-info").empty();
                 $(".login-info").append("<p class='text-danger'>" + response.message + "</p>");
