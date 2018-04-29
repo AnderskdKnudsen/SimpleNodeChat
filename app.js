@@ -2,6 +2,13 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 
+//socket
+const server = require("http").Server(app);
+let io = require("socket.io")(server);
+
+//Sets port
+app.set('port', process.env.PORT || 3000);
+
 var startPage = {
     index: "login.html"
 };
@@ -41,11 +48,11 @@ const db = {
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-const server = app.listen(3000, err => {
+server.listen(app.get("port"), err => {
     if(err)
-        console.log("Error connecting on port", server.address().port + " " + err.stack);
+        console.log("Error connecting on port", app.get("port") + " " + err.stack);
     else
-        console.log("Connected to server on port", server.address().port);
+        console.log("Connected to server on port", app.get("port"));
 });
 
 app.post("/login-user", (req, res) => {
@@ -144,4 +151,8 @@ app.post("/submit-user", (req, res) => {
 
             res.send(response);
         });
+});
+
+io.on("connection", socket => {
+    console.log("User connected!");
 });
