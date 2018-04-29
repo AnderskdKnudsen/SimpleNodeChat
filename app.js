@@ -13,6 +13,13 @@ var startPage = {
     index: "login.html"
 };
 
+
+//TODO
+//Show clients username pr message.(Username: msg) on chatpage(index.html)
+//Show existing message history.(setup table in db, decide on how many messages back you wanna show)
+//unit testing
+
+
 //Body-parser and static(with selected startpage)
 app.use("/", express.static("public", startPage));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -154,5 +161,14 @@ app.post("/submit-user", (req, res) => {
 });
 
 io.on("connection", socket => {
-    console.log("User connected!");
+    console.log("user connected");
+
+    socket.on("disconnect", () => {
+        console.log("user disconnected");
+    });
+
+    socket.on("chat message", msg => {
+        console.log("Message", msg);
+        io.emit("chat message", msg);
+    });
 });
