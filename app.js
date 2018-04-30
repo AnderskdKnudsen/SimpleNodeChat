@@ -17,7 +17,7 @@ var startPage = {
 //TODO
 //Show clients username pr message.(Username: msg) on chatpage(index.html)
 //Show existing message history.(setup table in db, decide on how many messages back you wanna show)
-//unit testing
+//unit testingæ
 
 
 //Body-parser and static(with selected startpage)
