@@ -130,7 +130,7 @@ app.post("/submit-user", (req, res) => {
                                 from: mailCredentials.mail,
                                 to: req.body.email,
                                 subject: "Welcome, welcome.",
-                                text: "Welcome " + req.body.username + " to simplenodechat.awersome!"
+                                text: "Welcome " + req.body.username + " to simplenodechat.awesome!"
                             };
 
                             transporter.sendMail(mailOptions, (err, info) => {
