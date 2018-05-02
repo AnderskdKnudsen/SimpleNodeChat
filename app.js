@@ -13,12 +13,9 @@ var startPage = {
     index: "login.html"
 };
 
-
 //TODO
-//Show clients username pr message.(Username: msg) on chatpage(index.html)
 //Show existing message history.(setup table in db, decide on how many messages back you wanna show)
 //unit testingæ
-
 
 //Body-parser and static(with selected startpage)
 app.use("/", express.static("public", startPage));
@@ -62,12 +59,8 @@ server.listen(app.get("port"), err => {
         console.log("Connected to server on port", app.get("port"));
 });
 
-let connectedClients = [];
-
 app.post("/login-user", (req, res) => {
     let response = {};
-
-    connectedClients.push(req.body.username);
 
     db.User.query().select().where("username", req.body.username)
         .then(foundUsers => {
@@ -164,6 +157,8 @@ app.post("/submit-user", (req, res) => {
         });
 });
 
+let messages = [];
+
 io.on("connection", socket => {
     console.log("user connected");
 
@@ -173,6 +168,15 @@ io.on("connection", socket => {
 
     socket.on("chat message", msg => {
         console.log("Message", msg);
+
+        if(messages.length >= 10)
+            messages.shift();
+        messages.push(msg);
+
         io.emit("chat message", msg);
     });
+});
+
+app.get("/get-messages", (req, res) => {
+    res.send(messages);
 });

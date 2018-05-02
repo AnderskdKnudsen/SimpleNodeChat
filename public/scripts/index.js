@@ -13,6 +13,16 @@ $(document).ready(() => {
             username = data.results[0].name.first + " " + data.results[0].name.last;
         });
     }
+    
+    $(".alias-container").append(username);
+
+    $.get("get-messages", response => {
+        console.log(response);
+        response.forEach(message => {
+            $("#messages").append($('<li>').text(message));
+        });
+    });
+
 
     $(() => {
         $('form').submit(() => {
