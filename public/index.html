@@ -4,22 +4,122 @@
 <head>
     <meta charset="utf-8" />
     <title>Chat</title>
-    <script src="scripts/ajax.js"></script>
-    <script src="scripts/jquery.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="styles/main.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="styles/chat.css">
-    <link rel="stylesheet" href="styles/bootstrap.css">
-    <script defer src="scripts/socket.js"></script>
-    <script defer src="scripts/index.js"></script>
+    <style>
+        .top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: black;
+            color: white;
+        }
+
+        .middle {
+            position: absolute;
+            top: 80px;
+            bottom: 50px;
+            left: 0;
+            right: 0;
+            background: grey;
+            overflow-y: auto;
+        }
+
+        .bottom {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 50px;
+            background: black;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>This is the sickest chatsystem ever created!</h1>
-    <h4 class="alias-container">Your alias is: </h4>
-    <ul id="messages"></ul>
-    <form action="" class="chat-container">
-      <input id="m" autocomplete="off" /><button type="submit">Send</button>
-    </form>
+    <div id="app">
+        <div class="top">
+            <h1>This is the sickest chatsystem ever created!</h1>
+            <h4>Your alias is: {{ username }}</h4>
+        </div>
+
+        <div class="middle" ref="chat">
+            <ul class="messages">
+                <li v-for="data in messages" :style="{ 'background': data.color }">
+                    <b>
+                        {{ 
+                            data.name 
+                        }}:
+                    </b>
+                    {{
+                        data.message
+                    }}
+                </li>
+            </ul>
+        </div>
+
+        <div class="bottom">
+            <form @submit.prevent="sendMessage">
+                <input v-model="message" id="m" autocomplete="off" />
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts/ajax.js"></script>
+    <script src="scripts/jquery.js"></script>
+    <script src="scripts/socket.js"></script>
+    <!--  <script src="scripts/index.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script>
+        var socket = io.connect("http://localhost:3000");
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue!',
+                messages: [],
+                username: ''
+            },
+            mounted() {
+                this.getMessages()
+                this.listenForMessages()
+                this.username = prompt("Welcome to the chatroom\nPlease choose a username.", "Username");
+            },
+            methods: {
+                getMessages() {
+                    $.get("get-messages", response => {
+                        this.messages = response
+                        this.scrollToBottom()
+                    });
+                },
+                listenForMessages() {
+                    socket.on("chat message", msg => {
+                        this.messages.push(msg)
+                        this.scrollToBottom()
+                    });
+                },
+                scrollToBottom() {
+                    var chat = this.$refs.chat
+
+                    setTimeout(function () {
+                        chat.scrollTo(0, chat.scrollHeight)
+                    }, 0)
+                },
+                sendMessage() {
+                    const postMessage = {
+                        name: this.username,
+                        message: this.message,
+                        color: "yellow"
+                    }
+
+                    socket.emit("chat message", postMessage);
+                    this.message = ''
+                }
+            }
+        })
+    </script>
 </body>
 
 </html>
