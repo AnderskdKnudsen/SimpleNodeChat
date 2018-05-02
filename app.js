@@ -62,8 +62,12 @@ server.listen(app.get("port"), err => {
         console.log("Connected to server on port", app.get("port"));
 });
 
+let connectedClients = [];
+
 app.post("/login-user", (req, res) => {
     let response = {};
+
+    connectedClients.push(req.body.username);
 
     db.User.query().select().where("username", req.body.username)
         .then(foundUsers => {
