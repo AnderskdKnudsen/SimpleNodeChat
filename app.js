@@ -14,8 +14,9 @@ var startPage = {
 };
 
 //TODO
-//Show existing message history.(setup table in db, decide on how many messages back you wanna show)
-//unit testingæ
+//Username(index.js) promise -> random navn hvis man ikke giver et navn -> append det rigtige username
+//index.js li og form overlapper
+//unit testing
 
 //Body-parser and static(with selected startpage)
 app.use("/", express.static("public", startPage));
