@@ -160,15 +160,37 @@ app.post("/submit-user", (req, res) => {
 
 let messages = [];
 
+let users = []
+
+const colors = [
+    '#55efc4',
+    '#81ecec',
+    '#74b9ff',
+    '#fab1a0',
+    '#636e72',
+    '#fdcb6e',
+    '#d63031',
+    '#6c5ce7',
+    '#3742fa'
+]
+
 io.on("connection", socket => {
+    const userId = socket.id
     console.log("user connected");
 
     socket.on("disconnect", () => {
-        console.log("user disconnected");
+        colors.push(users[userId])
     });
 
+    const randomIndex = Math.floor(Math.random() * colors.length)
+
+    users[userId] = colors[randomIndex]
+    delete colors[randomIndex]
+
     socket.on("chat message", msg => {
-        console.log("Message", msg);
+        msg.userId = userId
+        
+        msg.color = users[userId]
 
         if(messages.length >= 10)
             messages.shift();
@@ -180,4 +202,9 @@ io.on("connection", socket => {
 
 app.get("/get-messages", (req, res) => {
     res.send(messages);
+});
+
+app.get("/get-clients", (req, res) => {
+    console.log(users)
+    res.send();
 });

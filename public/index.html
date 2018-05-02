@@ -47,15 +47,11 @@
 
         <div class="middle" ref="chat">
             <ul class="messages">
-                <li v-for="data in messages" :style="{ 'background': data.color }">
+                <li v-for="(data, key) in messages" :key="key" :style="{ 'background': data.color }">
                     <b>
-                        {{ 
-                            data.name 
-                        }}:
+                        {{ data.name }}:
                     </b>
-                    {{
-                        data.message
-                    }}
+                    {{ data.message }}
                 </li>
             </ul>
         </div>
@@ -78,20 +74,62 @@
         var app = new Vue({
             el: '#app',
             data: {
-                message: 'Hello Vue!',
+                message: '',
                 messages: [],
-                username: ''
+                username: '',
+                colors: [
+                    '#55efc4',
+                    '#81ecec',
+                    '#74b9ff',
+                    '#fab1a0',
+                    '#636e72',
+                    '#fdcb6e',
+                    '#d63031',
+                    '#6c5ce7',
+                    '#3742fa'
+                ]
             },
             mounted() {
                 this.getMessages()
                 this.listenForMessages()
-                this.username = prompt("Welcome to the chatroom\nPlease choose a username.", "Username");
+                this.getClients()
+                this.promptUsername()
             },
             methods: {
+                promptUsername() {
+                    const username = prompt("Welcome to the chatroom\nPlease choose a username.", "Username");
+
+                    const doRandom = [
+                        null,
+                        "",
+                        "Username"
+                    ];
+
+
+                    if(doRandom.indexOf(username) === -1) {
+                        this.username = username;
+                        return;
+                    }
+
+                    console.log(username)
+
+                    $.ajax({
+                        type: "GET",
+                        url: 'https://randomuser.me/api/',
+                        dataType: 'json'
+                    }).then(data => {
+                        this.username = data.results[0].name.first + " " + data.results[0].name.last;
+                    });
+                },
                 getMessages() {
                     $.get("get-messages", response => {
                         this.messages = response
                         this.scrollToBottom()
+                    });
+                },
+                getClients() {
+                    $.get("get-clients", response => {
+                        console.log(response)
                     });
                 },
                 listenForMessages() {
