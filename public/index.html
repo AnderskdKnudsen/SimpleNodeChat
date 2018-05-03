@@ -13,7 +13,8 @@
         <div class="top-container">
             <div class="top">
                 <h1>This is the sickest chatsystem ever created!</h1>
-                <p>Your alias is: {{ username }}</p>
+                <p>Alias: {{ username }} </p>
+                <p>Color: </p>
             </div>
         </div>
 
@@ -31,7 +32,9 @@
             <div class="middle-clients">
                 <h3>People online</h3>
                 <ul class="online-clients">
-                    
+                    <li v-for="(user, key) in users" :key="key">
+                        {{ user }}
+                    </li>
                 </ul>
             </div>
         </div>
@@ -56,12 +59,15 @@
             data: {
                 message: '',
                 messages: [],
-                username: ''
+                username: '',
+                users: []
             },
             mounted() {
-                this.getMessages()
-                this.listenForMessages()
-                this.promptUsername()
+                this.getMessages();
+                this.listenForMessages();
+                this.promptUsername();
+                this.postUsername();
+                this.updateUsers();
             },
             methods: {
                 promptUsername() {
@@ -88,33 +94,46 @@
                 },
                 getMessages() {
                     $.get("get-messages", response => {
-                        this.messages = response
-                        this.scrollToBottom()
+                        this.messages = response;
+                        this.scrollToBottom();
                     });
                 },
                 listenForMessages() {
                     socket.on("chat message", msg => {
-                        this.messages.push(msg)
-                        this.scrollToBottom()
+                        this.messages.push(msg);
+                        this.scrollToBottom();
                     });
                 },
                 scrollToBottom() {
-                    var chat = this.$refs.chat
-                    
+                    var chat = this.$refs.chat;
+
                     setTimeout(function () {
                         chat.scrollTo(0, chat.scrollHeight)
-                    }, 0)
+                    }, 0);
                 },
                 sendMessage() {
                     const postMessage = {
                         name: this.username,
                         message: this.message
-                    }                    
+                    }
                     socket.emit("chat message", postMessage);
-                    this.message = ''
+                    this.message = '';
+                },
+                postUsername() {
+                    socket.on("askForUsername", () => {
+                        socket.emit("foundUsername", this.username);
+                    });
+                },
+                updateUsers() {
+                    socket.on("updateUsers", users => {
+                        this.users = [];
+                        users.forEach(u => {
+                            this.users.push(u);
+                        });
+                    });
                 }
             }
-        })
+        });
     </script>
 </body>
 

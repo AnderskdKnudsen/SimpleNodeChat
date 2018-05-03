@@ -14,8 +14,6 @@ var startPage = {
 };
 
 //TODO
-//Username(index.js) promise -> random navn hvis man ikke giver et navn -> append det rigtige username
-//index.js li og form overlapper
 //unit testing
 
 //Body-parser and static(with selected startpage)
@@ -33,7 +31,7 @@ const knex = Knex(knexConfig.development);
 Model.knex(knex);
 
 //Nodemailer
-const nodemailer = require("nodemailer");   
+const nodemailer = require("nodemailer");
 const mailCredentials = require("./config/mail_credentials.js");
 
 var transporter = nodemailer.createTransport({
@@ -54,7 +52,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 server.listen(app.get("port"), err => {
-    if(err)
+    if (err)
         console.log("Error connecting on port", app.get("port") + " " + err.stack);
     else
         console.log("Connected to server on port", app.get("port"));
@@ -65,15 +63,15 @@ app.post("/login-user", (req, res) => {
 
     db.User.query().select().where("username", req.body.username)
         .then(foundUsers => {
-            if(foundUsers.length === 0){
+            if (foundUsers.length === 0) {
                 response.status = 404,
-                response.message = "Incorrect login! Try again or make a new user!";
+                    response.message = "Incorrect login! Try again or make a new user!";
 
                 res.send(response);
-            } else if(foundUsers.length >= 1){
+            } else if (foundUsers.length >= 1) {
                 bcrypt.compare(req.body.password, foundUsers[0].password)
                     .then(found => {
-                        if(found) {
+                        if (found) {
                             response.status = 200;
                             response.message = "Successfully logged in!";
 
@@ -88,7 +86,7 @@ app.post("/login-user", (req, res) => {
             }
         }).catch(err => {
             response.status = 500,
-            response.message = "Error querying database! Try again later";
+                response.message = "Error querying database! Try again later";
 
             res.send(message);
         });
@@ -101,8 +99,8 @@ app.post("/submit-user", (req, res) => {
     db.User.query().select().where("username", req.body.username)
         .orWhere("email", req.body.email)
         .then(foundUsers => {
-            if(foundUsers.length > 0){
-                if(foundUsers[0].email === req.body.email) {
+            if (foundUsers.length > 0) {
+                if (foundUsers[0].email === req.body.email) {
                     response.status = 403;
                     response.message = "Error! E-mail already used.";
 
@@ -110,7 +108,7 @@ app.post("/submit-user", (req, res) => {
                 } else {
                     response.status = 403;
                     response.message = "Error! Username taken.";
-    
+
                     res.send(response);
                 }
             } else {
@@ -132,7 +130,7 @@ app.post("/submit-user", (req, res) => {
                             };
 
                             transporter.sendMail(mailOptions, (err, info) => {
-                                if(err) {
+                                if (err) {
                                     response.mailstatus = 403;
                                     response.mailinfo = "Error sending confirmation mail!";
                                 }
@@ -159,7 +157,7 @@ app.post("/submit-user", (req, res) => {
 });
 
 let messages = [];
-
+let userColors = [];
 let users = [];
 
 const colors = [
@@ -175,34 +173,44 @@ const colors = [
 ];
 
 io.on("connection", socket => {
-    const userId = socket.id;
+    let socketUsername = "";
+    // io.emit("updateUsers", []);
 
-    console.log("user connected");
+    socket.emit("askForUsername");
 
-    socket.on("disconnect", () => {
-        console.log("user disconnected");
-        colors.push(users[userId]);
+    socket.on("foundUsername", (username) => {
+        socketUsername = username;
+        users.push(username);
+        io.emit("updateUsers", users);
     });
 
+    socket.on("disconnect", () => {
+        colors.push(userColors[userId]);
+        delete userColors[userId];
+
+        let index = users.indexOf(socketUsername);
+        if(index !== -1) users.splice(index, 1);
+
+        io.emit("updateUsers", users);
+    });
+
+    const userId = socket.id;
     const randomIndex = Math.floor(Math.random() * colors.length);
 
-    users[userId] = colors[randomIndex];
-    const userColor = users[userId];
+    userColors[userId] = colors[randomIndex];
+    const userColor = userColors[userId];
     delete colors[randomIndex];
 
     socket.on("chat message", msg => {
-        //msg.userId = userId;
-        
         msg.color = userColor;
 
-        if(messages.length >= 10)
+        if (messages.length >= 10)
             messages.shift();
         messages.push(msg);
 
         io.emit("chat message", msg);
     });
 });
-
 
 app.get("/get-messages", (req, res) => {
     res.send(messages);
