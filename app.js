@@ -159,6 +159,10 @@ app.post("/submit-user", (req, res) => {
 let messages = [];
 let userColors = [];
 let users = [];
+let usersAndNumber = {
+    users:[],
+    numberOfClients: 0
+}
 
 const colors = [
     '#55efc4',
@@ -174,24 +178,34 @@ const colors = [
 
 io.on("connection", socket => {
     let socketUsername = "";
+    usersAndNumber.numberOfClients++;
     // io.emit("updateUsers", []);
 
     socket.emit("askForUsername");
 
     socket.on("foundUsername", (username) => {
         socketUsername = username;
-        users.push(username);
-        io.emit("updateUsers", users);
+        // users.push(username);
+        // io.emit("updateUsers", users);
+        usersAndNumber.users.push(username);
+        io.emit("updateUsers", usersAndNumber);
+
     });
 
     socket.on("disconnect", () => {
+        usersAndNumber.numberOfClients--;
         colors.push(userColors[userId]);
         delete userColors[userId];
 
-        let index = users.indexOf(socketUsername);
-        if(index !== -1) users.splice(index, 1);
+        // let index = users.indexOf(socketUsername);
+        // if(index !== -1) users.splice(index, 1);
 
-        io.emit("updateUsers", users);
+        let index = usersAndNumber.users.indexOf(socketUsername);
+        if(index !== -1) usersAndNumber.users.splice(index, 1);
+
+        // io.emit("updateUsers", users);
+        io.emit("updateUsers", usersAndNumber);
+
     });
 
     const userId = socket.id;

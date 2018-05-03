@@ -30,7 +30,7 @@
                 </ul>
             </div>
             <div class="middle-clients">
-                <h3>People online</h3>
+                <h3>People online ({{ numberOfClients }})</h3>
                 <ul class="online-clients">
                     <li v-for="(user, key) in users" :key="key">
                         {{ user }}
@@ -60,7 +60,8 @@
                 message: '',
                 messages: [],
                 username: '',
-                users: []
+                users: [],
+                numberOfClients: 0
             },
             mounted() {
                 this.getMessages();
@@ -125,11 +126,19 @@
                     });
                 },
                 updateUsers() {
-                    socket.on("updateUsers", users => {
+                    // socket.on("updateUsers", users => {
+                    //     this.users = [];
+                    //     users.forEach(u => {
+                    //         this.users.push(u);
+                    //     });
+                    // });
+                    socket.on("updateUsers", usersAndNumber => {
                         this.users = [];
-                        users.forEach(u => {
+                        usersAndNumber.users.forEach(u => {
                             this.users.push(u);
                         });
+                        console.log(this.users);
+                        this.numberOfClients = usersAndNumber.numberOfClients;
                     });
                 }
             }
