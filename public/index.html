@@ -10,20 +10,30 @@
 
 <body>
     <div id="app">
-        <div class="top">
-            <h1>This is the sickest chatsystem ever created!</h1>
-            <p>Your alias is: {{ username }}</p>
+        <div class="top-container">
+            <div class="top">
+                <h1>This is the sickest chatsystem ever created!</h1>
+                <p>Your alias is: {{ username }}</p>
+            </div>
         </div>
 
-        <div class="middle" ref="chat">
-            <ul class="messages">
-                <li v-for="(data, key) in messages" :key="key" :style="{ 'background': data.color }">
-                    <b>
-                        {{ data.name }}:
-                    </b>
-                    {{ data.message }}
-                </li>
-            </ul>
+        <div class="middle-container">
+            <div class="middle-chat" ref="chat">
+                <ul class="messages">
+                    <li v-for="(data, key) in messages" :key="key" :style="{ 'background': data.color }">
+                        <b>
+                            {{ data.name }}:
+                        </b>
+                        {{ data.message }}
+                    </li>
+                </ul>
+            </div>
+            <div class="middle-clients">
+                <h3>People online</h3>
+                <ul class="online-clients">
+                    
+                </ul>
+            </div>
         </div>
 
         <div class="bottom">
@@ -63,7 +73,7 @@
                         "Username"
                     ];
 
-                    if(doRandom.indexOf(username) === -1) {
+                    if (doRandom.indexOf(username) === -1) {
                         this.username = username;
                         return;
                     }
@@ -90,7 +100,7 @@
                 },
                 scrollToBottom() {
                     var chat = this.$refs.chat
-
+                    
                     setTimeout(function () {
                         chat.scrollTo(0, chat.scrollHeight)
                     }, 0)
@@ -99,8 +109,7 @@
                     const postMessage = {
                         name: this.username,
                         message: this.message
-                    }
-
+                    }                    
                     socket.emit("chat message", postMessage);
                     this.message = ''
                 }

@@ -9,19 +9,27 @@ body {
 }
 
 /*Top!*/
-.top {
+.top-container {
+    background: black;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 80px;
-    background: black;
+}
+.top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 77px;
+    background: lightslategray;
     color: white;
 }
 
 .top > h1 {
-    margin-top: 10px;
     text-align: center;
+    margin-top: 1.5%;
 }
 
 .top > p {
@@ -31,14 +39,50 @@ body {
 }
 
 /*Middle*/
-.middle {
+.middle-container {
     position: absolute;
     top: 80px;
     bottom: 40px;
-    left: 0;
-    right: 0;
+    left: 0px;
+    right: 0px;
+    background: black;
+}
+
+.middle-clients {
+    position: fixed;
+    top: 80px;
+    bottom: 40px;
+    left: 75%;
+    right: 0px;
+    overflow-y: auto;
+    background: lightcoral;
+    float: left;
+    color: white;
+    font: bold;
+    padding-top: 0.2%;
+}
+
+.middle-clients h3 {
+    text-align: center;
+}
+
+.online-clients {
+    list-style-type: none;
+}
+
+.online-clients li {
+    padding: 5px 20px;
+}
+
+.middle-chat {
+    position: fixed;
+    top: 80px;
+    bottom: 40px;
+    left: 0px;
+    right: 25.2%;
     overflow-y: auto;
     background: lightgray;
+    float: left;
 }
 
 .messages {
@@ -62,7 +106,6 @@ body {
 }
 
 form {
-    background: #000;
     padding: 3px;
     position: fixed;
     bottom: 0;
@@ -73,15 +116,15 @@ form input {
     border: 0;
     padding: 10px;
     width: 90%;
-    margin-right: .5%;
+    margin-right: .3%;
     float: left;
 }
 
 form button {
-    width: 9%;
+    width: 9.5%;
     padding: 10px;
     float: left;
-    background: lightgreen;
+    background: yellowgreen;
     border: none;
 }
 
