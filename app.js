@@ -160,7 +160,7 @@ app.post("/submit-user", (req, res) => {
 
 let messages = [];
 
-let users = []
+let users = [];
 
 const colors = [
     '#55efc4',
@@ -172,25 +172,28 @@ const colors = [
     '#d63031',
     '#6c5ce7',
     '#3742fa'
-]
+];
 
 io.on("connection", socket => {
-    const userId = socket.id
+    const userId = socket.id;
+
     console.log("user connected");
 
     socket.on("disconnect", () => {
-        colors.push(users[userId])
+        console.log("user disconnected");
+        colors.push(users[userId]);
     });
 
-    const randomIndex = Math.floor(Math.random() * colors.length)
+    const randomIndex = Math.floor(Math.random() * colors.length);
 
-    users[userId] = colors[randomIndex]
-    delete colors[randomIndex]
+    users[userId] = colors[randomIndex];
+    const userColor = users[userId];
+    delete colors[randomIndex];
 
     socket.on("chat message", msg => {
-        msg.userId = userId
+        //msg.userId = userId;
         
-        msg.color = users[userId]
+        msg.color = userColor;
 
         if(messages.length >= 10)
             messages.shift();
@@ -200,11 +203,7 @@ io.on("connection", socket => {
     });
 });
 
+
 app.get("/get-messages", (req, res) => {
     res.send(messages);
-});
-
-app.get("/get-clients", (req, res) => {
-    console.log(users)
-    res.send();
 });

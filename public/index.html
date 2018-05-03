@@ -6,43 +6,13 @@
     <title>Chat</title>
     <link rel="stylesheet" type="text/css" media="screen" href="styles/main.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="styles/chat.css">
-    <style>
-        .top {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 80px;
-            background: black;
-            color: white;
-        }
-
-        .middle {
-            position: absolute;
-            top: 80px;
-            bottom: 50px;
-            left: 0;
-            right: 0;
-            background: grey;
-            overflow-y: auto;
-        }
-
-        .bottom {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            left: 0;
-            height: 50px;
-            background: black;
-        }
-    </style>
 </head>
 
 <body>
     <div id="app">
         <div class="top">
             <h1>This is the sickest chatsystem ever created!</h1>
-            <h4>Your alias is: {{ username }}</h4>
+            <p>Your alias is: {{ username }}</p>
         </div>
 
         <div class="middle" ref="chat">
@@ -76,23 +46,11 @@
             data: {
                 message: '',
                 messages: [],
-                username: '',
-                colors: [
-                    '#55efc4',
-                    '#81ecec',
-                    '#74b9ff',
-                    '#fab1a0',
-                    '#636e72',
-                    '#fdcb6e',
-                    '#d63031',
-                    '#6c5ce7',
-                    '#3742fa'
-                ]
+                username: ''
             },
             mounted() {
                 this.getMessages()
                 this.listenForMessages()
-                this.getClients()
                 this.promptUsername()
             },
             methods: {
@@ -105,13 +63,10 @@
                         "Username"
                     ];
 
-
                     if(doRandom.indexOf(username) === -1) {
                         this.username = username;
                         return;
                     }
-
-                    console.log(username)
 
                     $.ajax({
                         type: "GET",
@@ -125,11 +80,6 @@
                     $.get("get-messages", response => {
                         this.messages = response
                         this.scrollToBottom()
-                    });
-                },
-                getClients() {
-                    $.get("get-clients", response => {
-                        console.log(response)
                     });
                 },
                 listenForMessages() {
@@ -148,8 +98,7 @@
                 sendMessage() {
                     const postMessage = {
                         name: this.username,
-                        message: this.message,
-                        color: "yellow"
+                        message: this.message
                     }
 
                     socket.emit("chat message", postMessage);
