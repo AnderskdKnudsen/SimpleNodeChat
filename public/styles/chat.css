@@ -61,7 +61,7 @@ body {
 .middle-clients {
     position: fixed;
     top: 80px;
-    bottom: 40px;
+    bottom: 41px;
     left: 75%;
     right: 0px;
     overflow-y: auto;
@@ -87,7 +87,7 @@ body {
 .middle-chat {
     position: fixed;
     top: 80px;
-    bottom: 40px;
+    bottom: 41px;
     left: 0px;
     right: 25.2%;
     overflow-y: auto;
