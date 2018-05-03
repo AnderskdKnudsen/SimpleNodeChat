@@ -199,8 +199,10 @@ io.on("connection", socket => {
 
     userColors[userId] = colors[randomIndex];
     const userColor = userColors[userId];
-    delete colors[randomIndex];
-
+    
+    let colorIndex = colors.indexOf(userColor);
+    if(colorIndex !== -1) colors.splice(colorIndex, 1);
+    
     socket.on("chat message", msg => {
         msg.color = userColor;
 
