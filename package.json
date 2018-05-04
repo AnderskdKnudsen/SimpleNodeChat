@@ -4,15 +4,17 @@
   "description": "Simple chat",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "Anders Knudsen",
   "license": "MIT",
   "dependencies": {
     "bcrypt": "1.0.3",
     "body-parser": "^1.18.2",
+    "chai": "^4.1.2",
     "express": "^4.16.3",
     "knex": "^0.14.4",
+    "mocha": "^5.1.1",
     "mysql2": "^1.5.3",
     "nodemailer": "^4.6.4",
     "objection": "^1.1.1",

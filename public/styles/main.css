@@ -2,6 +2,10 @@
     margin: 2px;
 }
 
+.login-form > input {
+    text-indent: 10%;
+}
+
 .loader {
     border: 16px solid #f3f3f3; /* Light grey */
     border-top: 16px solid #3498db; /* Blue */

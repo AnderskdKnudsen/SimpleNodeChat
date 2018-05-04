@@ -4,27 +4,30 @@
 <head>
     <meta charset="utf-8" />
     <title>Login</title>
-    <script> src="scripts.ajax.js"</script>
+    
     <link rel="stylesheet" type="text/css" media="screen" href="styles/main.css" />
-    <script src="scripts/jquery.js"></script>
     <link rel="stylesheet" href="styles/bootstrap.css">
-    <script defer src="scripts/login.js"></script>
+    <link rel="stylesheet" href="styles/login.css">
 </head>
 
 <body>
     <div class="login">
-        <form>
-            <input type="text" placeholder="Username" class="login-username">
-            <input type="password" placeholder="Password" class="login-password">
+        <form class="login-form">
+            <input type="text" placeholder="Username" class="login-field login-username">
+            <input type="password" placeholder="Password" class="login-field login-password">
             <button type="submit" class="btn btn-primary login-btn">Login</button>
         </form>
     </div>
-    <div class="login-info"></div>
-    <div class="loader"></div>
     <div class="submit-container">
         <p>Not a user? Register here!</p>
         <button class="btn btn-secondary redirect-to-submit-btn">Register user</button>
     </div>
+    <div class="login-info"></div>
+    <div class="loader"></div>
+
+    <script src="scripts/ajax.js"></script>
+    <script src="scripts/jquery.js"></script>
+    <script src="scripts/login.js"></script>
 </body>
 
 </html>

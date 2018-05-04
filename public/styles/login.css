@@ -1,0 +1,42 @@
+body {
+    background: lightslategray;
+}
+
+.login {
+    position: absolute;
+    top: 35%;
+    left: 0px;
+    right: 0px;
+}
+
+.login-form {
+    display: flex;
+    justify-content: center;
+}
+
+.login-field {
+    margin: 45px 5px;
+    width: 200px;
+    float: left;
+}
+
+.login-btn {
+    margin: 45px 5px;
+    background: lightgreen;
+    clear: both;
+}
+
+.submit-container {
+    position: relative;
+    width: 200px;
+    height: 80px;
+}
+
+.submit-container > button {
+    
+}
+
+.submit-container > p {
+    color: white;
+}
+
