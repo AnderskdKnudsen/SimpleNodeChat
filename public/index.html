@@ -126,12 +126,6 @@
                     });
                 },
                 updateUsers() {
-                    // socket.on("updateUsers", users => {
-                    //     this.users = [];
-                    //     users.forEach(u => {
-                    //         this.users.push(u);
-                    //     });
-                    // });
                     socket.on("updateUsers", usersAndNumber => {
                         this.users = [];
                         usersAndNumber.users.forEach(u => {

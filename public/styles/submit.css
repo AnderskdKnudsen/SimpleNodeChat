@@ -2,43 +2,39 @@ body {
     background: lightslategray;
 }
 
-.login {
+h1 {
+    text-align: center;
+    color: white;
+    margin-top: 30px;
+}
+
+.submit {
     position: absolute;
     top: 35%;
     left: 0px;
     right: 0px;
 }
 
-.login-form {
+.submit-form {
     display: flex;
     justify-content: center;
 }
 
-.login-field {
+.submit-field {
     margin: 45px 5px;
     width: 200px;
     float: left;
+    padding: 12px;
 }
 
-.login-btn {
+.submit-btn {
     margin: 45px 5px;
     background: lightgreen;
     clear: both;
 }
 
-.submit-container {
-    position: relative;
-    width: 200px;
-    height: 80px;
-}
-
-.submit-container > p {
-    color: white;
-}
-
-.login-info {
-    font-size: 1.5em;
+.submit-info {
     display: flex;
     justify-content: center;
+    font-size: 1.5em;
 }
-
