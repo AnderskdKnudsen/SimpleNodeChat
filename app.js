@@ -159,7 +159,7 @@ app.post("/submit-user", (req, res) => {
 let messages = [];
 let userColors = [];
 let usersAndNumber = {
-    users:[],
+    users: [],
     numberOfClients: 0
 }
 
@@ -180,14 +180,15 @@ io.on("connection", socket => {
     usersAndNumber.numberOfClients++;
 
     socket.emit("askForUsername");
-
     socket.on("foundUsername", (username) => {
         socketUsername = username;
-       
+
         usersAndNumber.users.push(username);
         io.emit("updateUsers", usersAndNumber);
 
     });
+
+
 
     socket.on("disconnect", () => {
         usersAndNumber.numberOfClients--;
@@ -195,7 +196,7 @@ io.on("connection", socket => {
         delete userColors[userId];
 
         let index = usersAndNumber.users.indexOf(socketUsername);
-        if(index !== -1) usersAndNumber.users.splice(index, 1);
+        if (index !== -1) usersAndNumber.users.splice(index, 1);
 
         io.emit("updateUsers", usersAndNumber);
 
@@ -206,10 +207,10 @@ io.on("connection", socket => {
 
     userColors[userId] = colors[randomIndex];
     const userColor = userColors[userId];
-    
+
     let colorIndex = colors.indexOf(userColor);
-    if(colorIndex !== -1) colors.splice(colorIndex, 1);
-    
+    if (colorIndex !== -1) colors.splice(colorIndex, 1);
+
     socket.on("chat message", msg => {
         msg.color = userColor;
 
@@ -224,3 +225,20 @@ io.on("connection", socket => {
 app.get("/get-messages", (req, res) => {
     res.send(messages);
 });
+
+
+//TEST
+
+module.exports.queryDb = async function (username) {
+    var foundUsername = false
+
+    await db.User.query().select().where("username", username)
+        .then(foundUser => {
+            if (foundUser.length === 0) return foundUsername;
+            if (foundUser[0].username === username) foundUsername = true;
+
+        });
+
+    return foundUsername;
+}
+
