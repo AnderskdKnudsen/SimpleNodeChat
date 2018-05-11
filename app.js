@@ -13,8 +13,11 @@ var startPage = {
     index: "login.html"
 };
 
-//TODO
-//unit testing
+// This file is split up in:
+// First: Setup(require, initialization of objects and stuff)
+// Second: The actual API
+// Third: Socket(with setup and functions)
+// Fourth: Testing(mocha/chai)
 
 //Body-parser and static(with selected startpage)
 app.use("/", express.static("public", startPage));
@@ -241,4 +244,3 @@ module.exports.queryDb = async function (username) {
 
     return foundUsername;
 }
-
